@@ -50,4 +50,4 @@ def plot(kmlPath, saveMap=True, savePath="out", zoom=7, dpi=1000, tileServer=DAR
 	plt.savefig(os.path.join(savePath, "plot.png"), bbox_inches=0, dpi=dpi, transparent=True)
 	print("done!")	
 
-plot("/home/tijl/Downloads/LocationHistory2108.kml", dpi=1500)
+plot("~/Downloads/LocationHistory.kml")
