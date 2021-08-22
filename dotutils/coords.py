@@ -12,7 +12,7 @@ def groupByDate(data, nb):
 	
 	return groups
 
-def removeClosePoints(data, minThreshold, maxThreshold):
+def removeCloseAndFarPoints(data, minThreshold, maxThreshold):
 	result = [data[0]]
 	for i in range(len(data)):
 		if i > 0:
@@ -24,10 +24,7 @@ def removeClosePoints(data, minThreshold, maxThreshold):
 				result.append(data[i])
 	return np.array(result)
 	
-def splitOnDist(data, maxThreshold, dMap, opt):
-	data = np.array(data)
-	scaledXY = scale(data[:,0].astype(float), data[:,1].astype(float), opt)
-	scaledXY = np.floor(scaledXY).astype(int)
+def splitOnDist(data, maxThreshold, dMap):
 	result = [[data[0]]]
 	j = 0
 	for i in range(len(data)):
@@ -36,12 +33,11 @@ def splitOnDist(data, maxThreshold, dMap, opt):
 			v2 = data[i][:2]
 			dist = [(float(a) - float(b))**2 for a, b in zip(v1, v2)]
 			dist = math.sqrt(sum(dist))
-			density = dMap[scaledXY[0][i]][scaledXY[1][i]]
+			density = dMap.getDensity(float(data[i][0]), float(data[i][1]))
 			
 			if (dist > (maxThreshold * max(0.1, (1/density))) or getTimeDiffH(result[j][-1], data[i]) > 2):
 				j += 1
 				result.append([data[i]])
-				lastScaled = scale
 			else:
 				result[j].append(data[i])
 	return [np.array(res) for res in result]

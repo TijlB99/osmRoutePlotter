@@ -5,32 +5,36 @@ import math
 
 def lats2nums(lats, zoom):
 	ytiles = []
-	n = 2.0 ** zoom
 	for lat_deg in lats:
-		lat_rad = math.radians(lat_deg)
-		ytiles.append(n * (1.0 - (math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi)) / 2.0)
+		ytiles.append(lat2num(lat_deg, zoom))
 	return ytiles
 
 def lons2nums(lons, zoom):
 	xtiles = []
-	n = 2.0 ** zoom
 	for lon_deg in lons:
-		xtiles.append(n * (lon_deg + 180.0) / 360.0)
+		xtiles.append(lon2num(lon_deg, zoom))
 	return xtiles
 
-def deg2num(lat_deg, lon_deg, zoom):
-	lat_rad = math.radians(lat_deg)
+def lat2num(lat, zoom):
 	n = 2.0 ** zoom
-	xtile = int(n * (lon_deg + 180.0) / 360.0)
-	ytile = int(n * (1.0 - (math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi)) / 2.0)
+	lat_rad = math.radians(lat)
+	return n * (1.0 - (math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi)) / 2.0
+
+def lon2num(lon, zoom):
+	n = 2.0 ** zoom
+	return n * (lon + 180.0) / 360.0
+
+def deg2num(lat, lon, zoom):
+	xtile = int(lon2num(lon, zoom))
+	ytile = int(lat2num(lat, zoom))
 	return (xtile, ytile)
   
 def num2deg(xtile, ytile, zoom):
 	n = 2.0 ** zoom
-	lon_deg = (xtile * 360.0) / n - 180.0
+	lon = (xtile * 360.0) / n - 180.0
 	lat_rad = math.atan(math.sinh(math.pi * (1 - 2.0 * ytile / n)))
-	lat_deg = lat_rad * 180 / math.pi
-	return (lat_deg, lon_deg)
+	lat = lat_rad * 180 / math.pi
+	return (lat, lon)
   
     
 def getImageCluster(lon_deg, lon_max, lat_deg, lat_max, zoom, smurl):
