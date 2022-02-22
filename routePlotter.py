@@ -15,7 +15,7 @@ matplotlib.use('Agg')
 NORMAL = r"https://tile.openstreetmap.org/{0}/{1}/{2}.png"
 DARK = r"https://cartodb-basemaps-b.global.ssl.fastly.net/dark_all/{0}/{1}/{2}.png"
 
-def plot(kmlPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileServer=DARK, boundingBox=None, verbose=True):
+def plot(inputPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileServer=DARK, boundingBox=None, verbose=True):
 	"""
 	kmlPath: path to LocationHistory.kml explorted from Google
 	saveDensityMap: save density map
@@ -29,7 +29,10 @@ def plot(kmlPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileSe
 	logger = SimpleLogger(verbose)
 
 	Path(savePath).mkdir(parents=True, exist_ok=True)
-	dataPoints = readKml(kmlPath)
+	if(inputPath.endswith(".json")):
+		dataPoints = readJson(inputPath)
+	else:
+		dataPoints = readKml(inputPath)
 	logger.log(f"Input: {dataPoints.shape[0]} points.")
 	dataPoints = removeCloseAndFarPoints(dataPoints, 1e-3, 15)
 	logger.log(f"Reduced to {dataPoints.shape[0]} points.")
@@ -70,7 +73,7 @@ def plot(kmlPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileSe
 	plt.savefig(plotPath, bbox_inches=0, dpi=dpi, transparent=True)
 	logger.log("done!")	
 
-def _plotByGrouping(dataPoints, densityMap, zoom):
+def _plotByGrouping(dataPoints, densityMap, zoom, plt=plt):
 	"""
 	Connects dots close to each other in time and distance relative to density map
 	"""
