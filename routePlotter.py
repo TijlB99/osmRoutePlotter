@@ -82,7 +82,7 @@ def _plotByGrouping(dataPoints, densityMap, zoom, plt=plt):
 		color = generatePastelColor()
 		rs = splitOnDist(groups[group], 1, densityMap)
 		for r in rs:
-			plt.plot(lons2nums(r[:,0].astype(float), zoom), lats2nums(r[:,1].astype(float), zoom),".", color=color, markersize=0.5, mew=0, linewidth=0.1, linestyle="-")
+			plt.plot(lons2nums(r[:,0].astype(float), zoom), lats2nums(r[:,1].astype(float), zoom),".", color=color, markersize=0, mew=0, linewidth=0.2, linestyle="-", alpha=0.3)
 
 
 if __name__ == "__main__":
