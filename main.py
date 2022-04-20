@@ -11,4 +11,5 @@ zoomworld = 1
 # plot(kmlPath, boundingBox=be, zoom=zoombe, verbose=True)
 # plot(kmlPath, boundingBox=ch, zoom=zoomch, verbose=True)
 # plot(kmlPath, boundingBox=world, zoom=zoomworld, verbose=True)
-plot(kmlPath, verbose=True, zoom=12, startDate='2022-04-16 00:00:00', endDate='2022-04-19 12:00:00')
+# plot(kmlPath, verbose=True, zoom=12, startDate='2022-04-16 00:00:00', endDate='2022-04-19 12:00:00')
+plot(kmlPath, verbose=True)
