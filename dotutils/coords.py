@@ -24,6 +24,16 @@ def removeCloseAndFarPoints(data, minThreshold, maxThreshold):
 				result.append(data[i])
 	return np.array(result)
 	
+def removeJumps(data, threshold):
+	result = [data[0]]
+	for i in range(1, len(data) - 1):
+		p1, p2, p3 = data[i - 1], data[i], data[i + 1]
+		if dist(p1, p2) / (dist(p1, p3) + 1e-10) < threshold:
+			result.append(data[i])
+	result.append(data[-1])
+	return np.array(result)
+
+	
 def splitOnDist(data, maxThreshold, dMap):
 	result = [[data[0]]]
 	j = 0
@@ -55,3 +65,6 @@ def getBounds(res):
 	maxx = np.max(res[:,0].astype(float))
 	maxy = np.max(res[:,1].astype(float))
 	return minx, maxx, miny, maxy
+
+def dist(p1, p2):
+	return  (((float(p2[0]) - float(p1[0]))**2) + ((float(p2[1])-float(p1[1]))**2) )**0.5
