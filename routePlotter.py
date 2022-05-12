@@ -5,6 +5,7 @@ from dotutils.logger import *
 from dotutils.color import *
 from dotutils.osm import *
 from dotutils.io import *
+from datetime import date
 from pathlib import Path
 import matplotlib
 import os
@@ -15,7 +16,7 @@ matplotlib.use('Agg')
 NORMAL = r"https://tile.openstreetmap.org/{0}/{1}/{2}.png"
 DARK = r"https://cartodb-basemaps-b.global.ssl.fastly.net/dark_all/{0}/{1}/{2}.png"
 
-def plot(inputPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileServer=DARK, boundingBox=None, verbose=True, startDate = None, endDate = None):
+def plot(inputPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tileServer=DARK, boundingBox=None, verbose=True, startDate = None, endDate = None, name = None):
 	"""
 	kmlPath: path to LocationHistory.kml explorted from Google
 	saveDensityMap: save density map
@@ -66,7 +67,7 @@ def plot(inputPath, saveDensityMap=False, savePath="out", zoom=7, dpi=1000, tile
 		plt.xlim(lon2num(minx, zoom), lon2num(maxx, zoom))	
 		plt.ylim(lat2num(miny, zoom), lat2num(maxy, zoom))
 
-	plotPath = os.path.join(savePath, "plot.png")
+	plotPath = os.path.join(savePath, date.today().strftime('%y%m%d') + (("_" + name) if name else "") + ".png")
 	logger.log(f"Saving fig to {plotPath}")
 
 	plt.axis('off')
