@@ -14,21 +14,19 @@ def groupByDate(data, nb):
 
 def removeCloseAndFarPoints(data, minThreshold, maxThreshold):
 	result = [data[0]]
-	for i in range(len(data)):
-		if i > 0:
-			v1 = result[-1][:2]
-			v2 = data[i][:2]
-			dist = [(float(a) - float(b))**2 for a, b in zip(v1, v2)]
-			dist = math.sqrt(sum(dist))
-			if dist > minThreshold and dist < maxThreshold:
-				result.append(data[i])
+	for i in range(1, len(data)):	
+		v1 = result[-1][:2]
+		v2 = data[i][:2]
+		dist = distance(v1,v2)
+		if dist > minThreshold and dist < maxThreshold:
+			result.append(data[i])
 	return np.array(result)
 	
 def removeJumps(data, threshold):
 	result = [data[0]]
 	for i in range(1, len(data) - 1):
 		p1, p2, p3 = data[i - 1], data[i], data[i + 1]
-		if dist(p1, p2) / (dist(p1, p3) + 1e-10) < threshold:
+		if distance(p1, p3) / (distance(p1, p2) + 1e-10) >= threshold:
 			result.append(data[i])
 	result.append(data[-1])
 	return np.array(result)
@@ -36,20 +34,17 @@ def removeJumps(data, threshold):
 	
 def splitOnDist(data, maxThreshold, dMap):
 	result = [[data[0]]]
-	j = 0
-	for i in range(len(data)):
-		if i > 0:
-			v1 = result[j][-1][:2]
-			v2 = data[i][:2]
-			dist = [(float(a) - float(b))**2 for a, b in zip(v1, v2)]
-			dist = math.sqrt(sum(dist))
-			density = dMap.getDensity(float(data[i][0]), float(data[i][1]))
-			
-			if (dist > (maxThreshold * max(0.1, (1/density))) or getTimeDiffH(result[j][-1], data[i]) > 2):
-				j += 1
-				result.append([data[i]])
-			else:
-				result[j].append(data[i])
+
+	for i in range(1, len(data)):
+		v1 = result[-1][-1][:2]
+		v2 = data[i][:2]
+		dist = distance(v1,v2)
+		density = dMap.getDensity(float(data[i][0]), float(data[i][1]))
+		
+		if (dist > (maxThreshold * max(0.1, (1/density))) or getTimeDiffH(result[-1][-1], data[i]) > 2):
+			result.append([data[i]])
+		else:
+			result[-1].append(data[i])
 	return [np.array(res) for res in result]
 	
 def getTimeDiffH(d0, d1):
@@ -66,5 +61,5 @@ def getBounds(res):
 	maxy = np.max(res[:,1].astype(float))
 	return minx, maxx, miny, maxy
 
-def dist(p1, p2):
+def distance(p1, p2):
 	return  (((float(p2[0]) - float(p1[0]))**2) + ((float(p2[1])-float(p1[1]))**2) )**0.5
