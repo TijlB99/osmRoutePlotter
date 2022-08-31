@@ -89,7 +89,7 @@ def _plotByGrouping(dataPoints, densityMap, zoom, splitDistThreshold=1, plt=plt)
 		color = generatePastelColor()
 		rs = splitOnDist(groups[group], splitDistThreshold, densityMap)
 		for r in rs:
-			plt.plot(lons2nums(r[:,0].astype(float), zoom), lats2nums(r[:,1].astype(float), zoom),".", color=color, markersize=0.2, mew=0, linewidth=0.2, linestyle="-", alpha=0.6)
+			plt.plot(lons2nums(r[:,0].astype(float), zoom), lats2nums(r[:,1].astype(float), zoom),".", color=color, markersize=0.2, mew=0, linewidth=0.05, linestyle="-", alpha=0.6)
 
 def filterByDate(data, startDate:str, endDate:str):
 	return np.array([entry for entry in data if entry[3] > startDate and entry[3] < endDate])
